@@ -1,4 +1,5 @@
 import logging
+from traceback import format_exc
 
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
@@ -20,9 +21,13 @@ async def start_fnc(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
-	logging.warning(str(message))
-    await bot.send_message(message.chat.id, message.text)
-	
+	try:
+		logging.warning(str(message))
+		await bot.send_message(message.chat.id, message.text)
+	except:
+		for s in format_exc().splitlines():
+			logging.info("*", s, "*")
+		
 
 async def on_startup(dp):
     logging.warning(
