@@ -13,20 +13,25 @@ dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    logging.warning(f'Recieved a message from {message.from_user}')
-    await bot.send_message(message.chat.id, message.text)
+@dp.message_handler(commands=['start', 'help'])
+async def start_fnc(message: types.Message):
+    logging.warning(f'Recieved a message from \(Получено сообщение от\) {message.from_user}')
+    await bot.send_message(message.chat.id, 'Привет, далее все что напишешь вернется тебе как ЭХО!')
+
+#@dp.message_handler()
+#async def echo(message: types.Message):
+#    logging.warning(f'Recieved a message from \(Получено сообщение от\) {message.from_user}')
+#    await bot.send_message(message.chat.id, message.text)
 
 
 async def on_startup(dp):
     logging.warning(
-        'Starting connection. ')
+        'Starting connection. \(Установка Вебхука\) ')
     await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
 
 
 async def on_shutdown(dp):
-    logging.warning('Bye! Shutting down webhook connection')
+    logging.warning('Bye! Shutting down webhook connection \(Выключение Вебхука\)')
 
 
 def main():
