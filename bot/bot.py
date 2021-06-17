@@ -17,7 +17,6 @@ dp.middleware.setup(LoggingMiddleware())
 @dp.message_handler(commands=['start', 'help'])
 async def start_fnc(message: types.Message):
     logging.warning(f'Recieved a message from \(Получено сообщение от\) {message.from_user}')
-	n = 1/0
     await bot.send_message(message.chat.id, 'Привет, далее все что напишешь вернется тебе как ЭХО!')
 
 @dp.message_handler()
