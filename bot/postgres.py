@@ -11,12 +11,12 @@ class PostgreSQL:
         """Connect to MySQL Database."""
         try:
             if self.conn is None:
-                con = psycopg2.connect(
-                    database=DATABASE,
-                    user=DBUSER,
-                    password=DBPASS,
-                    host=DBHOST,
-                    port=DBPORT
+                self.conn = psycopg2.connect(
+                            database=DATABASE,
+                            user=DBUSER,
+                            password=DBPASS,
+                            host=DBHOST,
+                            port=DBPORT
                 )
         except Exception as e:
             logging.info('Ошибка при подключении в БД: '+ str(e))

@@ -29,13 +29,13 @@ async def echo(message: types.Message):
 
 	logging.warning(str(message))
 	await bot.send_message(message.chat.id, message.text)
-	
 
-		
+
+
 
 async def on_startup(dp):
     logging.warning(
-        'Starting connection. \(Установка Вебхука\) ')
+        'Установка Вебхука')
     await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
 
 
