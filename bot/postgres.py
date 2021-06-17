@@ -19,7 +19,7 @@ class PostgreSQL:
                     port=DBPORT
                 )
         except Exception as e:
-            logging.info('Ошибка при подключении в БД: '+ str(e) + '\n' + str(e.pgerror))
+            logging.info('Ошибка при подключении в БД: '+ str(e))
         finally:
             logging.info('Успешное подклчюение к БД')
 
@@ -37,7 +37,7 @@ class PostgreSQL:
                 cur.close()
                 return result
         except Exception as e:
-            logging.info('Ошибка при выполнении запроса ' + query + '\n' + str(e) + '\n' + str(e.pgerror))
+            logging.info('Ошибка при выполнении запроса ' + query + '\n' + str(e))
         finally:
             if self.conn:
                 self.conn.close()
