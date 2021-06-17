@@ -20,8 +20,9 @@ async def start_fnc(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
+	logging.warning(str(message))
     await bot.send_message(message.chat.id, message.text)
-
+	
 
 async def on_startup(dp):
     logging.warning(
