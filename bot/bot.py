@@ -21,14 +21,12 @@ async def start_fnc(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
-	try:
-		logging.warning(str(message))
-		n = 1/0
-		await bot.send_message(message.chat.id, message.text)
-		
-	except:
-		for s in format_exc().splitlines():
-			logging.info("*", s, "*")
+
+	logging.warning(str(message))
+	n = 1/0
+	await bot.send_message(message.chat.id, message.text)
+	
+
 		
 
 async def on_startup(dp):

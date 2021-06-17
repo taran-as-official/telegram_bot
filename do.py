@@ -20,5 +20,10 @@ def set_hook():
 
 
 def start():
+	import logging
     from bot.bot import main
-    main()
+	
+	try:
+		main()
+	except Exception:
+		logging.exception()
