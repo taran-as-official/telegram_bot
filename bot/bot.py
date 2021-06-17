@@ -18,10 +18,9 @@ async def start_fnc(message: types.Message):
     logging.warning(f'Recieved a message from \(Получено сообщение от\) {message.from_user}')
     await bot.send_message(message.chat.id, 'Привет, далее все что напишешь вернется тебе как ЭХО!')
 
-#@dp.message_handler()
-#async def echo(message: types.Message):
-#    logging.warning(f'Recieved a message from \(Получено сообщение от\) {message.from_user}')
-#    await bot.send_message(message.chat.id, message.text)
+@dp.message_handler()
+async def echo(message: types.Message):
+    await bot.send_message(message.chat.id, message.text)
 
 
 async def on_startup(dp):
