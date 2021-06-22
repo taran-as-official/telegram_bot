@@ -82,7 +82,7 @@ class PostgreSQL:
     def add_user_info(self, user_id, f_name = None, l_name = None, u_name = None, phone = None):
         #Добавляем нового подписчика или обновляем информацию
         sql_query = """insert into telegram_users_tbl as t (id, first_name,last_name,user_name,phone) 
-                       values ({0},{1},{2},{3},{4})  
+                       values ({0},'{1}','{2}','{3}',{4})  
                         on conflict(id) do update
                         set first_name = coalesce('{1}', first_name),
                             last_name  = coalesce('{2}', last_name),
