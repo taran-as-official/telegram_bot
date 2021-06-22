@@ -20,7 +20,7 @@ db = PostgreSQL()
 
 
 
-@dp.callback_query_handler(func=lambda c: c.data == 'www_game')
+@dp.callback_query_handler(lambda c: c.data == 'www_game')
 async def process_callback_www_game(callback_query: types.CallbackQuery):
 
     await callback_query.answer('Будем играть в что где когда!')
