@@ -72,9 +72,9 @@ class PostgreSQL:
 
         result = self.run_query(sql_query)
 
-        logging.info(result)
+        logging.info("Инфо о пользователе: " + result)
 
-        return result[0]
+        return result
 
 
     def add_user_info(self, user_id, f_name = '', l_name = '', u_name = '', phone = ''):
