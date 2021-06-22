@@ -3,8 +3,8 @@ import psycopg2
 from bot.settings import (DATABASE, DBUSER, DBPASS, DBHOST, DBPORT)
 
 class PostgreSQL:
-    
-    logging.basicConfig(level=logging.DEBUG)
+
+    logging.basicConfig(level=logging.INFO)
 
     def __init__(self):
         self.conn = None
@@ -79,7 +79,7 @@ class PostgreSQL:
         return result
 
 
-    def add_user_info(self, user_id, f_name = '', l_name = '', u_name = '', phone = ''):
+    def add_user_info(self, user_id, f_name = None, l_name = None, u_name = None, phone = None):
         #Добавляем нового подписчика или обновляем информацию
         sql_query = """insert into telegram_users_tbl as t (id, first_name,last_name,user_name,phone) 
                        values ({0},{1},{2},{3},{4})  
