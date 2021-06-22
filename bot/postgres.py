@@ -72,7 +72,7 @@ class PostgreSQL:
 
         result = self.run_query(sql_query)
 
-        logging.info("Инфо о пользователе: " + result)
+        logging.info("Инфо о пользователе: " + str(result))
 
         return result
 
