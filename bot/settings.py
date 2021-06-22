@@ -12,7 +12,7 @@ DBPASS = os.getenv('DBPASS')
 DBHOST = os.getenv('DBHOST')
 DBPORT = os.getenv('DBPORT')
 HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
-
+ADMIN_ID = os.getenv('ADMIN_ID')
 
 # webhook settings
 WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'

@@ -66,31 +66,26 @@ class PostgreSQL:
         #если длина результат больше одного символа то считаем что подписчик существует
         return bool(len(self.run_query(sql_query)))
 
+    def get_user_info(self, user_id):
+        #Вытягиваем всю необходимую инфу о пользователе
+        sql_query = "select * from users_tbl where id_user = {0}".format(user_id)
 
-    def add_subscriber(self, user_id, f_name, l_name, u_name, chat_id, chat_type, chat_title, status = 0):
-        c_date = datetime.now()
-        #Добавляем нового подписчика
-        sql_query = """INSERT IGNORE INTO users
-                       SET id_user     =  {0},
-                           first_name  = '{1}',
-                           last_name   = '{2}',
-                           user_name   = '{3}',
-                           create_date = '{4}'""".format(user_id,f_name,l_name,u_name,c_date)
-        self.run_query(sql_query)
+        result = self.run_query(sql_query)
 
-        #добавляем чат id
-        sql_query = """INSERT IGNORE INTO users_chat
-                       SET id_user     =  {0},
-                           chat_id     =  {1},
-                           chat_type   = '{2}',
-                           create_date = '{3}',
-                           chat_title  = '{4}'""".format(user_id, chat_id, chat_type, c_date, chat_title)
-        self.run_query(sql_query)
+        logging.info(result)
 
-        sql_query = """INSERT IGNORE INTO subscribe_users
-                       SET id_user     =  {0},
-                           id_status   =  {1},
-                           create_date = '{2}'""".format(user_id,status,c_date)
+        return result[0]
+
+
+    def add_user_info(self, user_id, f_name = '', l_name = '', u_name = '', phone = ''):
+        #Добавляем нового подписчика или обновляем информацию
+        sql_query = """insert into telegram_users_tbl as t (id, first_name,last_name,user_name,phone) 
+                       values ({0},{1},{2},{3},{4})  
+                        on conflict(id) do update
+                        set first_name = coalesce('{1}', first_name),
+                            last_name  = coalesce('{2}', last_name),
+                            user_name  = coalesce('{3}', user_name),
+                            phone      = coalesce('{4}', phone) ;""".format(user_id,f_name,l_name,u_name,phone)
         self.run_query(sql_query)
 
 

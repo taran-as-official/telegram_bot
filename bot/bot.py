@@ -7,21 +7,42 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
 from bot.settings import (BOT_TOKEN, HEROKU_APP_NAME,
                           WEBHOOK_URL, WEBHOOK_PATH,
-                          WEBAPP_HOST, WEBAPP_PORT)
+                          WEBAPP_HOST, WEBAPP_PORT, ADMIN_ID)
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 db = PostgreSQL()
 
-@dp.message_handler(commands=['start', 'help'])
+
+
+
+
+
+
+@dp.callback_query_handler(func=lambda c: c.data == 'www_game')
+async def process_callback_www_game(callback_query: types.CallbackQuery):
+
+    await callback_query.answer('Будем играть в что где когда!')
+
+
+@dp.message_handler(commands=['start'])
 async def start_fnc(message: types.Message):
+    # получаем информацию о пользователе
+    user = db.get_user_info(message.from_user.id)
+
+    #если пользователя не существует в БД, то добавим его
+    if not(user):
+        db.add_user_info(message.from_user.id, message.from_user.first_name, message.from_user.last_name, message.from_user.username)
+
+    # инициируем кнопки
+    www_game = types.InlineKeyboardButton('Что? Где? Когда?', callback_data='www_game')
+    inline_games = types.InlineKeyboardMarkup().add(www_game)
     logging.info(f'Получено сообщение от {message.from_user}')
-    await bot.send_message(message.chat.id, 'Привет, далее все что напишешь вернется тебе как ЭХО!')
-    if db.subscriber_exists(message.from_user.id):
-        await bot.send_message(message.chat.id, 'Ты есть в базе!')
-    else:
-        await bot.send_message(message.chat.id, 'Тебя нет в базе!')
+    await message.answer(f'Привет, во что будем играть?', reply_markup = inline_games)
+
+    if message.from_user.id != ADMIN_ID:
+        await bot.send_message(ADMIN_ID, f'{message.from_user.full_name} присоединился к боту')
 
 
 @dp.message_handler()
@@ -40,8 +61,10 @@ async def on_startup(dp):
 
 
 async def on_shutdown(dp):
-    logging.warning('Bye! Shutting down webhook connection \(Выключение Вебхука\)')
+    logging.warning('Выключение Вебхука')
 
+
+logging.info(f'САМЫЙ КОНЕЦ ПРОГРАММЫ')
 
 def main():
     logging.basicConfig(level=logging.INFO)
