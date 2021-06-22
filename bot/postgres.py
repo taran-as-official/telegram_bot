@@ -3,6 +3,8 @@ import psycopg2
 from bot.settings import (DATABASE, DBUSER, DBPASS, DBHOST, DBPORT)
 
 class PostgreSQL:
+    
+    logging.basicConfig(level=logging.DEBUG)
 
     def __init__(self):
         self.conn = None
@@ -68,7 +70,7 @@ class PostgreSQL:
 
     def get_user_info(self, user_id):
         #Вытягиваем всю необходимую инфу о пользователе
-        sql_query = "select * from users_tbl where id_user = {0}".format(user_id)
+        sql_query = "select * from telegram_users_tbl where id = {0}".format(user_id)
 
         result = self.run_query(sql_query)
 
