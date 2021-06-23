@@ -1,5 +1,6 @@
 import logging
 import psycopg2
+import re
 from bot.settings import (DATABASE, DBUSER, DBPASS, DBHOST, DBPORT)
 
 class PostgreSQL:
@@ -34,7 +35,15 @@ class PostgreSQL:
             with self.conn.cursor() as cur:
                 logging.info("Выполнение запроса: " + query)
                 cur.execute(query) #выпоняем запрос
-                result = cur.fetchone()
+
+                logging.info('cur.rowcount:' + str(cur.rowcount))
+
+                result = None
+
+                #если при выполнении запрос вернулась
+                if re.search(r'SELECT', cur.statusmessage) :
+                    result = cur.fetchone()
+
                 self.conn.commit()
                 cur.close()
                 return result
