@@ -41,7 +41,8 @@ async def start_fnc(message: types.Message):
     inline_games = types.InlineKeyboardMarkup().add(www_game)
     logging.info(f'Получено сообщение от {message.from_user}')
     await message.answer(f'Привет, во что будем играть?', reply_markup = inline_games)
-
+    logging.info(f'user id из JSON {message.from_user.id}')
+    logging.info(f'user id из ADMIN_ID {ADMIN_ID}')
     if message.from_user.id != ADMIN_ID:
         await bot.send_message(ADMIN_ID, f'{message.from_user.full_name} присоединился к боту')
 

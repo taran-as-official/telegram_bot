@@ -84,10 +84,10 @@ class PostgreSQL:
         sql_query = """insert into telegram_users_tbl as t (id, first_name,last_name,user_name,phone) 
                        values ({0},'{1}','{2}','{3}', {4})  
                         on conflict(id) do update
-                        set t.first_name = coalesce('{1}', t.first_name),
-                            t.last_name  = coalesce('{2}', t.last_name),
-                            t.user_name  = coalesce('{3}', t.user_name),
-                            t.phone      = coalesce( {4}, t.phone) ;""".format(user_id,f_name,l_name,u_name,phone)
+                        set first_name = coalesce('{1}', first_name),
+                            last_name  = coalesce('{2}', last_name),
+                            user_name  = coalesce('{3}', user_name),
+                            phone      = coalesce( {4}, phone) ;""".format(user_id,f_name,l_name,u_name,phone)
         self.run_query(sql_query)
 
 
