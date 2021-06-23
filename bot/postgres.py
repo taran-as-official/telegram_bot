@@ -33,7 +33,8 @@ class PostgreSQL:
             self.open_connection()
             with self.conn.cursor() as cur:
                 logging.info("Выполнение запроса: " + query)
-                result = cur.execute(query).fetchall() #выпоняем запрос и если что то есть, то возвращаем
+                cur.execute(query) #выпоняем запрос
+                result = cur.fetchone()
                 self.conn.commit()
                 cur.close()
                 return result
