@@ -17,7 +17,9 @@ dp.middleware.setup(LoggingMiddleware())
 db = PostgreSQL()
 
 user = None
+logging.info(f'НАЧАЛО ПРОГРАММЫ')
 
+some_var = 'default'
 #инициализируем конпки
 www_game = types.InlineKeyboardButton('Что? Где? Когда?', callback_data='www_game')
 kwiz = types.InlineKeyboardButton('Квиз', callback_data='kwiz')
@@ -26,7 +28,7 @@ inline_games = types.InlineKeyboardMarkup().add(www_game,kwiz)
 
 @dp.callback_query_handler(lambda c: c.data == 'www_game')
 async def process_callback_www_game(callback_query: types.CallbackQuery):
-    logging.info(f'Информация по юзеру что где когда: {user}')
+    logging.info(f'Информация по юзеру что где когда: {user} из переменная some_var: {some_var}' )
     await callback_query.answer('Будем играть в что где когда!',True)
 
 
@@ -34,7 +36,7 @@ async def process_callback_www_game(callback_query: types.CallbackQuery):
 async def process_callback_kwiz(callback_query: types.CallbackQuery):
     user = db.get_user_info(callback_query.from_user.id)
     logging.info(f'Информация по юзеру в КВИЗ: {user}')
-    await bot.send_message(callback_query.id, 'Играм в КВИЗ')
+    await bot.send_message(callback_query.from_user.id, 'Играм в КВИЗ')
 
 
 @dp.message_handler(commands=['start'])
