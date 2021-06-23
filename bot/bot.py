@@ -16,29 +16,37 @@ dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 db = PostgreSQL()
 
+user = None
 
-
-
+#инициализируем конпки
+www_game = types.InlineKeyboardButton('Что? Где? Когда?', callback_data='www_game')
+kwiz = types.InlineKeyboardButton('Квиз', callback_data='kwiz')
+inline_games = types.InlineKeyboardMarkup().add(www_game,kwiz)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'www_game')
 async def process_callback_www_game(callback_query: types.CallbackQuery):
+    logging.info(f'Информация по юзеру: {user}')
+    await callback_query.answer('Будем играть в что где когда!',True,'https://best-manual.ru', 5)
 
-    await callback_query.answer('Будем играть в что где когда!')
+
+@dp.callback_query_handler(lambda c: c.data == 'kwiz')
+async def process_callback_kwiz(callback_query: types.CallbackQuery):
+
+    await bot.send_message(callback_query.id, 'Играм в КВИЗ')
 
 
 @dp.message_handler(commands=['start'])
 async def start_fnc(message: types.Message):
     # получаем информацию о пользователе
     user = db.get_user_info(message.from_user.id)
-
+    logging.info(f'Информация по юзеру: {user}')
     #если пользователя не существует в БД, то добавим его
     if not(user):
         db.add_user_info(message.from_user.id, message.from_user.first_name, message.from_user.last_name, message.from_user.username)
 
-    # инициируем кнопки
-    www_game = types.InlineKeyboardButton('Что? Где? Когда?', callback_data='www_game')
-    inline_games = types.InlineKeyboardMarkup().add(www_game)
+    user = db.get_user_info(message.from_user.id)
+
     logging.info(f'Получено сообщение от {message}')
     await message.answer(f'Привет, во что будем играть?', reply_markup = inline_games)
     logging.info(f'user id из JSON {type(message.from_user.id)}')
