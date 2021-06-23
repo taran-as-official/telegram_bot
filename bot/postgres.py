@@ -79,7 +79,7 @@ class PostgreSQL:
         return result
 
 
-    def add_user_info(self, user_id, f_name = None, l_name = None, u_name = None, phone = None):
+    def add_user_info(self, user_id, f_name = None, l_name = None, u_name = None, phone = 'Null'):
         #Добавляем нового подписчика или обновляем информацию
         sql_query = """insert into telegram_users_tbl as t (id, first_name,last_name,user_name,phone) 
                        values ({0},'{1}','{2}','{3}', {4})  
