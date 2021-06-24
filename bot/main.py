@@ -1,24 +1,20 @@
-import logging
-from bot.postgres import PostgreSQL
-from bot.games import whatWhereWhen as www
 from aiogram import Bot, types
-from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
-from aiogram.utils.executor import start_webhook
-from bot.settings import (BOT_TOKEN, HEROKU_APP_NAME,
-                          WEBHOOK_URL, WEBHOOK_PATH,
-                          WEBAPP_HOST, WEBAPP_PORT, ADMIN_ID,BOT_ID)
-
-logging.basicConfig(level=logging.DEBUG)
-
+from aiogram.utils import executor
+import logging
+from postgres import PostgreSQL
+from debug_settings import (BOT_TOKEN, ADMIN_ID, BOT_ID)
+from games import whatWhereWhen as www
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
-dp.middleware.setup(LoggingMiddleware())
+logging.basicConfig(level=logging.DEBUG)
+
+
+#dp.middleware.setup(LoggingMiddleware())
 db = PostgreSQL()
 
-user = None
-logging.info(f'НАЧАЛО ПРОГРАММЫ')
+
 
 
 www_game = www()
@@ -90,28 +86,5 @@ async def echo(message: types.Message):
 
 
 
-
-async def on_startup(dp):
-    logging.warning(
-        'Установка Вебхука')
-    await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
-
-
-async def on_shutdown(dp):
-    logging.warning('Выключение Вебхука')
-
-
-logging.info(f'САМЫЙ КОНЕЦ ПРОГРАММЫ')
-
-def main():
-    logging.basicConfig(level=logging.INFO)
-
-    start_webhook(
-        dispatcher=dp,
-        webhook_path=WEBHOOK_PATH,
-        skip_updates=True,
-        on_startup=on_startup,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
-    )
-
+if __name__ == '__main__':
+    executor.start_polling(dp)

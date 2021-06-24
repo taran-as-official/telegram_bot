@@ -9,8 +9,11 @@ __pycache__/
 #idea file
 .idea
 
+
 # Distribution / packaging
 .Python
+bot/main
+bot/debug_settings
 build/
 develop-eggs/
 dist/

@@ -1,8 +1,8 @@
 import logging
 import psycopg2
 import re
-from bot.settings import (DATABASE, DBUSER, DBPASS, DBHOST, DBPORT)
-
+from bot.settings import (DATABASE, DBUSER, DBPASS, DBHOST, DBPORT) #при загрузке на сервер раскомментировать
+#from debug_settings import (DATABASE, DBUSER, DBPASS, DBHOST, DBPORT)
 class PostgreSQL:
 
     logging.basicConfig(level=logging.INFO)
