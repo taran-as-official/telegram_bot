@@ -75,20 +75,28 @@ class whatWhereWhen:
 
     async def give_minute(self, chat_id, message_id):
 
-            text = 'Время вышло'
+        text = 'Время вышло'
+        if not self.stop_timer:
             for i in range(1, 60):
-                if not self.stop_timer:
-                    time.sleep(1)
-                    await self.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=str(60 - i), reply_markup=self.markup_early_answer)
-                    #await self.bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,reply_markup=self.markup_early_answer)
-                else:
+
+                if self.stop_timer:
                     self.stop_timer = False
                     text = 'Досрочный ответ'
                     break
+                time.sleep(1)
+                await self.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=str(60 - i), reply_markup=self.markup_early_answer)
+                #await self.bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,reply_markup=self.markup_early_answer)
 
-            await self.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=text)
-            await self.show_answer(chat_id)
-            return
+
+
+
+        else:
+            self.stop_timer = False
+            text = 'Досрочный ответ'
+
+        await self.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=text)
+        await self.show_answer(chat_id)
+        return
 
 
     async def next_question(self, chat_id):
