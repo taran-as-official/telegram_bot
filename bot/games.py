@@ -84,7 +84,7 @@ class whatWhereWhen:
                     text = 'Досрочный ответ'
                     break
                 time.sleep(1)
-                await self.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=str(60 - i), reply_markup=self.markup_early_answer)
+                self.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=str(60 - i), reply_markup=self.markup_early_answer)
                 #await self.bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,reply_markup=self.markup_early_answer)
 
 
