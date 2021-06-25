@@ -54,7 +54,8 @@ async def process_callback_www_early_answer(callback_query: types.CallbackQuery)
 @dp.callback_query_handler(lambda c: c.data == 'www_give_minute')
 async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
 
-    await www_game.give_minute(callback_query.from_user.id,callback_query.message.message_id)
+    asyncio.ensure_future(www_game.give_minute(callback_query.from_user.id,callback_query.message.message_id))
+
 
 
 
@@ -125,6 +126,7 @@ def main():
     start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
+        loop=asyncio.get_event_loop(),
         skip_updates=True,
         on_startup=on_startup,
         host=WEBAPP_HOST,
