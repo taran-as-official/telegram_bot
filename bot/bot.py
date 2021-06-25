@@ -4,15 +4,18 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
-
+#"""
 from bot.postgres import PostgreSQL #расскоментить при загрузке на прод
 from bot.games import whatWhereWhen as www #расскоментить при загрузке на прод
 from bot.settings import (BOT_TOKEN, HEROKU_APP_NAME, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT, ADMIN_ID,BOT_ID) #расскоментить при загрузке на прод
+#"""
 
-#from postgres import PostgreSQL #расскоментить при зтестировании
-#from debug_settings import (BOT_TOKEN, ADMIN_ID, BOT_ID) #расскоментить при зтестировании
-#from games import whatWhereWhen as www #расскоментить при зтестировании
-#from aiogram.utils import executor #расскоментить при зтестировании
+"""
+from postgres import PostgreSQL #расскоментить при зтестировании
+from debug_settings import (BOT_TOKEN, ADMIN_ID, BOT_ID) #расскоментить при зтестировании
+from games import whatWhereWhen as www #расскоментить при зтестировании
+from aiogram.utils import executor #расскоментить при зтестировании
+"""
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -24,7 +27,6 @@ db = PostgreSQL()
 
 user = None
 logging.info(f'НАЧАЛО ПРОГРАММЫ')
-
 
 www_game = www()
 
@@ -41,17 +43,19 @@ async def process_callback_www_game(callback_query: types.CallbackQuery):
 
     await www_game.run_game(callback_query.from_user.id)
 
-@dp.callback_query_handler(lambda c: c.data == 'www_give_minute')
-async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
-
-    await www_game.give_minute(callback_query.from_user.id,callback_query.message.message_id)
-
-
 @dp.callback_query_handler(lambda c: c.data == 'www_early_answer')
 async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
     logging.info(f'Отловиили нажатие кнопки раннего ответа')
     await www_game.early_answer()
     logging.info(f'Отловиили нажатие кнопки раннего ответа выполнили установку счетчика в true')
+
+
+@dp.callback_query_handler(lambda c: c.data == 'www_give_minute')
+async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
+
+    await www_game.give_minute(callback_query.from_user.id,callback_query.message.message_id)
+    return
+
 
 
 @dp.callback_query_handler(lambda c: c.data == 'www_next_question')
