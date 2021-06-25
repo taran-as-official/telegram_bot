@@ -21,9 +21,8 @@ def set_hook():
 
 def start():
     import logging
-    import asyncio
     from bot.bot import main
     try:
-        asyncio.run(main())
+        main()
     except Exception:
         logging.exception()
