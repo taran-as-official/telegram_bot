@@ -114,7 +114,7 @@ async def on_shutdown(dp):
 
 logging.info(f'САМЫЙ КОНЕЦ ПРОГРАММЫ')
 
-#executor.start_polling(dp) # раскомментировать при тесте
+executor.start_polling(dp) # раскомментировать при тесте
 
 
 def main():
