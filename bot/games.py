@@ -1,6 +1,6 @@
 
-from debug_settings import (BOT_TOKEN) #при тесте это раскомментировать
-#from bot.settings import (BOT_TOKEN) #при проде это раскомментировать
+#from debug_settings import (BOT_TOKEN) #при тесте это раскомментировать
+from bot.settings import (BOT_TOKEN) #при проде это раскомментировать
 from aiogram import Bot, types
 from asyncio import sleep
 #import time
