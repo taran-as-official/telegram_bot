@@ -118,7 +118,7 @@ logging.info(f'САМЫЙ КОНЕЦ ПРОГРАММЫ')
 #executor.start_polling(dp) # раскомментировать при тесте
 
 
-async def main():
+def main():
     logging.basicConfig(level=logging.INFO)
 
     start_webhook(
