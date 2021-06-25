@@ -71,20 +71,28 @@ class whatWhereWhen:
 
 
     async def early_answer(self):
+        logging.info("Попали в early_answer: " + str(self.stop_timer))
         self.stop_timer = True
+        logging.info("Прошли в early_answer: " + str(self.stop_timer))
 
     async def give_minute(self, chat_id, message_id):
-
+        logging.info("Зашли в give_minute: " + str(self.stop_timer))
         text = 'Время вышло'
         if not self.stop_timer:
+            logging.info("Зашли в give_minute перед циклом: " + str(self.stop_timer))
+
             for i in range(1, 60):
+                logging.info("Зашли в give_minute в цикле " + str(i) + ": " + str(self.stop_timer))
 
                 if self.stop_timer:
+                    logging.info("Зашли в give_minute в досрочный ответ " + str(i) + ": " + str(self.stop_timer))
+
                     self.stop_timer = False
                     text = 'Досрочный ответ'
                     break
                 time.sleep(1)
-                self.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=str(60 - i), reply_markup=self.markup_early_answer)
+                logging.info("Зашли в give_minute в цикл " + str(i) + " завершен: " + str(self.stop_timer))
+                await self.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=str(60 - i), reply_markup=self.markup_early_answer)
                 #await self.bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,reply_markup=self.markup_early_answer)
 
 

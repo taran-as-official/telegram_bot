@@ -44,8 +44,10 @@ async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
 
 @dp.callback_query_handler(lambda c: c.data == 'www_early_answer')
 async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
-
+    logging.info(f'Отловиили нажатие кнопки раннего ответа')
     await www_game.early_answer()
+    logging.info(f'Отловиили нажатие кнопки раннего ответа выполнили установку счетчика в true')
+
 
 @dp.callback_query_handler(lambda c: c.data == 'www_next_question')
 async def process_callback_www_next_question(callback_query: types.CallbackQuery):
