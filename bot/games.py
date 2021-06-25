@@ -28,7 +28,7 @@ class whatWhereWhen:
         self.stop_timer = False
         logging.info("QUESTIION: " + str(self.quests))
 
-        self._cancel_event = event
+
 
         self.markup_next_quest = types.InlineKeyboardMarkup(row_width=2)
         btn_next_question = types.InlineKeyboardButton("Далее", callback_data='www_next_question')
