@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher(bot,asyncio.get_running_loop())
+dp = Dispatcher(bot,asyncio.new_event_loop())
 dp.middleware.setup(LoggingMiddleware())
 db = PostgreSQL()
 
