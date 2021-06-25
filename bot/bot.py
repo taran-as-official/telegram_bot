@@ -45,7 +45,7 @@ async def process_callback_www_game(callback_query: types.CallbackQuery):
     await www_game.run_game(callback_query.from_user.id)
 
 @dp.callback_query_handler(lambda c: c.data == 'www_early_answer')
-async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
+async def process_callback_www_early_answer(callback_query: types.CallbackQuery):
     logging.info(f'Отловиили нажатие кнопки раннего ответа')
     await www_game.early_answer()
     logging.info(f'Отловиили нажатие кнопки раннего ответа выполнили установку счетчика в true')
@@ -54,7 +54,7 @@ async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
 @dp.callback_query_handler(lambda c: c.data == 'www_give_minute')
 async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
 
-    dp.async_task(await www_game.give_minute(callback_query.from_user.id,callback_query.message.message_id))
+    await dp.async_task(www_game.give_minute(callback_query.from_user.id,callback_query.message.message_id))
 
 
 @dp.callback_query_handler(lambda c: c.data == 'www_next_question')
@@ -123,7 +123,6 @@ def main():
 
     start_webhook(
         dispatcher=dp,
-        loop=asyncio.get_event_loop(),
         webhook_path=WEBHOOK_PATH,
         skip_updates=True,
         on_startup=on_startup,
