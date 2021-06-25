@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher(bot,asyncio.get_event_loop())
 dp.middleware.setup(LoggingMiddleware())
 db = PostgreSQL()
 
@@ -124,7 +124,7 @@ def main():
     start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
-        loop=asyncio.new_event_loop(),
+        #loop=lo,
         skip_updates=True,
         on_startup=on_startup,
         host=WEBAPP_HOST,
