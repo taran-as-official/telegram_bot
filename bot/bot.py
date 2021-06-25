@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher(bot,asyncio.get_running_loop())
 dp.middleware.setup(LoggingMiddleware())
 db = PostgreSQL()
 
@@ -54,9 +54,8 @@ async def process_callback_www_early_answer(callback_query: types.CallbackQuery)
 @dp.callback_query_handler(lambda c: c.data == 'www_give_minute')
 async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
     #если будут какие то зацикленные функции, которые нужно будет остановить, то делать через такую конструкцию
-    asyncio.ensure_future(www_game.give_minute(callback_query.from_user.id,callback_query.message.message_id))
-    #await www_game.give_minute(callback_query.from_user.id, callback_query.message.message_id)
-
+    #asyncio.ensure_future(www_game.give_minute(callback_query.from_user.id,callback_query.message.message_id))
+    await www_game.give_minute(callback_query.from_user.id, callback_query.message.message_id)
 
 @dp.callback_query_handler(lambda c: c.data == 'www_next_question')
 async def process_callback_www_next_question(callback_query: types.CallbackQuery):
