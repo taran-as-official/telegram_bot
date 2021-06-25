@@ -54,7 +54,8 @@ async def process_callback_www_early_answer(callback_query: types.CallbackQuery)
 @dp.callback_query_handler(lambda c: c.data == 'www_give_minute')
 async def process_callback_www_give_minute(callback_query: types.CallbackQuery):
 
-    await dp.async_task(www_game.give_minute(callback_query.from_user.id,callback_query.message.message_id))
+    await www_game.give_minute(callback_query.from_user.id,callback_query.message.message_id)
+    
 
 
 @dp.callback_query_handler(lambda c: c.data == 'www_next_question')

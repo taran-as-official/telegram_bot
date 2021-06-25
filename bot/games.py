@@ -5,6 +5,9 @@ from aiogram import Bot, types
 from asyncio import sleep
 #import time
 import logging
+import asyncio
+
+cancel_event = asyncio.Event()
 
 #Игра Что? Где? Когда?
 class whatWhereWhen:
@@ -25,6 +28,7 @@ class whatWhereWhen:
         self.stop_timer = False
         logging.info("QUESTIION: " + str(self.quests))
 
+        self._cancel_event = event
 
         self.markup_next_quest = types.InlineKeyboardMarkup(row_width=2)
         btn_next_question = types.InlineKeyboardButton("Далее", callback_data='www_next_question')
