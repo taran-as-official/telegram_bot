@@ -1,4 +1,5 @@
 import logging
+import asyncio
 
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
@@ -122,6 +123,7 @@ async def main():
 
     start_webhook(
         dispatcher=dp,
+        loop=asyncio.get_event_loop(),
         webhook_path=WEBHOOK_PATH,
         skip_updates=True,
         on_startup=on_startup,
