@@ -1,8 +1,9 @@
 
-#from debug_settings import (BOT_TOKEN)
-from bot.settings import (BOT_TOKEN)
+#from debug_settings import (BOT_TOKEN) #при тесте это раскомментировать
+from bot.settings import (BOT_TOKEN) #при проде это раскомментировать
 from aiogram import Bot, types
-import time
+from asyncio import sleep
+#import time
 import logging
 
 #Игра Что? Где? Когда?
@@ -90,10 +91,11 @@ class whatWhereWhen:
                     self.stop_timer = False
                     text = 'Досрочный ответ'
                     break
-                time.sleep(1)
+                await sleep(1)
                 logging.info("Зашли в give_minute в цикл " + str(i) + " завершен: " + str(self.stop_timer))
                 await self.bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=str(60 - i), reply_markup=self.markup_early_answer)
                 #await self.bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,reply_markup=self.markup_early_answer)
+
 
 
 
