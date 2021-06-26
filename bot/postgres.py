@@ -1,13 +1,17 @@
 import logging
 import psycopg2
 import re
-from bot.settings import (DATABASE, DBUSER, DBPASS, DBHOST, DBPORT) #при загрузке на сервер раскомментировать
-#from debug_settings import (DATABASE, DBUSER, DBPASS, DBHOST, DBPORT) #при тесте раскомментировать
+#from data import config
+from data import debug_config as config
+
+
 class PostgreSQL:
 
     logging.basicConfig(level=logging.INFO)
 
     def __init__(self):
+        logging.info("Создался экземпляр БД")
+
         self.conn = None
 
     def open_connection(self):
@@ -15,11 +19,11 @@ class PostgreSQL:
         try:
             if self.conn is None:
                 self.conn = psycopg2.connect(
-                            database=DATABASE,
-                            user=DBUSER,
-                            password=DBPASS,
-                            host=DBHOST,
-                            port=DBPORT
+                            database=config.DATABASE,
+                            user=config.DBUSER,
+                            password=config.DBPASS,
+                            host=config.DBHOST,
+                            port=config.DBPORT
                 )
         except Exception as e:
             logging.info('Ошибка при подключении в БД: '+ str(e))

@@ -1,13 +1,9 @@
-
-#from debug_settings import (BOT_TOKEN) #при тесте это раскомментировать
-from bot.settings import (BOT_TOKEN) #при проде это раскомментировать
-from aiogram import Bot, types
+from aiogram import types
+from loader import bot
 from asyncio import sleep
-#import time
-import logging
-import asyncio
 
-cancel_event = asyncio.Event()
+import logging
+
 
 #Игра Что? Где? Когда?
 class whatWhereWhen:
@@ -15,7 +11,8 @@ class whatWhereWhen:
     logging.basicConfig(level=logging.DEBUG)
 
     def __init__(self):
-        self.bot = Bot(token=BOT_TOKEN)
+        logging.info("Инициализировался класс whatWhereWhen")
+
         #self.quests = db.get_questions(1) # в базе данный, в таблице application игре Что?Где?Когда? соответствует id = 1
         self.quests = ['Первый', 'Второй']
         self.answers = ['Первый ответ', 'Второй ответ']
@@ -26,7 +23,6 @@ class whatWhereWhen:
 
         self.game_is_runnig = False
         self.stop_timer = False
-        logging.info("QUESTIION: " + str(self.quests))
 
 
 

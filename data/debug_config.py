@@ -9,3 +9,12 @@ DBHOST = 'ec2-54-195-246-55.eu-west-1.compute.amazonaws.com'
 DBPORT = '5432'
 ADMIN_ID = 402584072
 BOT_ID = 1216459471
+
+# webhook settings
+WEBHOOK_HOST = f'https://taran-as-bot.herokuapp.com'
+WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}'
+WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
+
+# webserver settings
+WEBAPP_HOST = '0.0.0.0'
+WEBAPP_PORT = 5000

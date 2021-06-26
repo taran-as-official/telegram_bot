@@ -3,7 +3,7 @@
 
 def set_hook():
     import asyncio
-    from bot.settings import HEROKU_APP_NAME, WEBHOOK_URL, BOT_TOKEN
+    from data.config import HEROKU_APP_NAME, WEBHOOK_URL, BOT_TOKEN
     from aiogram import Bot
     bot = Bot(token=BOT_TOKEN)
 
@@ -21,7 +21,7 @@ def set_hook():
 
 def start():
     import logging
-    from bot.bot import main
+    from bot import main
     try:
         main()
     except Exception:

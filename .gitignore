@@ -12,8 +12,8 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-bot/main
-bot/debug_settings
+bot/
+data/debug_config
 build/
 develop-eggs/
 dist/
