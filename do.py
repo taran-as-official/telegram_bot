@@ -1,5 +1,11 @@
 ''' Run a function by ado <func_name> '''
+from aiogram.utils.executor import start_webhook
+from data import config
+#from data import debug_config as config
+import logging
+from loader import dp,bot,db
 
+logging.basicConfig(level=logging.DEBUG)
 
 def set_hook():
     import asyncio
@@ -18,7 +24,7 @@ def set_hook():
     asyncio.run(hook_set())
     bot.close()
 
-
+"""
 def start():
     import logging
     from bot import main
@@ -26,3 +32,38 @@ def start():
         main()
     except Exception:
        logging.exception()
+"""
+
+async def on_startup(dp):
+    logging.warning(
+        'Установка Вебхука')
+    await bot.set_webhook(config.WEBHOOK_URL,drop_pending_updates=True)
+
+
+async def on_shutdown(dp):
+    logging.warning('Выключение Вебхука')
+
+
+logging.info(f'САМЫЙ КОНЕЦ ПРОГРАММЫ')
+
+
+
+#if '__init__' == '__main__':
+#executor.start_polling(dp, on_startup=on_startup)
+
+
+
+
+def start():
+    logging.basicConfig(level=logging.INFO)
+
+    start_webhook(
+        dispatcher=dp,
+        webhook_path=config.WEBHOOK_PATH,
+        #loop=lo,
+        skip_updates=True,
+        on_startup=on_startup,
+        host=config.WEBAPP_HOST,
+        port=config.WEBAPP_PORT,
+    )
+

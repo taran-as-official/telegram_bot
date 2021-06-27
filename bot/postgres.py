@@ -1,8 +1,8 @@
 import logging
 import psycopg2
 import re
-#from data import config
-from data import debug_config as config
+from data import config
+#from data import debug_config as config
 
 
 class PostgreSQL:
