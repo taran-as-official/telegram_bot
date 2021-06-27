@@ -8,8 +8,8 @@ import logging
 
 import middlewares, filters, handlers
 
-#from data import config
-from data import debug_config as config
+from data import config
+#from data import debug_config as config
 
 from aiogram.utils.executor import start_webhook
 """
@@ -20,7 +20,6 @@ from bot.settings import (BOT_TOKEN, HEROKU_APP_NAME, WEBHOOK_URL, WEBHOOK_PATH,
 
 #"""
 #from debug_config import (BOT_TOKEN, ADMIN_ID, BOT_ID) #расскоментить при зтестировании
-from bot.games import whatWhereWhen as www #расскоментить при зтестировании
 from aiogram.utils import executor #расскоментить при зтестировании
 #"""
 
@@ -50,7 +49,7 @@ logging.info(f'САМЫЙ КОНЕЦ ПРОГРАММЫ')
 
 
 #if '__init__' == '__main__':
-executor.start_polling(dp, on_startup=on_startup)
+#executor.start_polling(dp, on_startup=on_startup)
 
 
 
