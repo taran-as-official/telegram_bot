@@ -16,8 +16,8 @@ async def start_www_game_fnc(call: CallbackQuery):
 @dp.callback_query_handler(text_contains="start_timer")
 async def start_minute_fnc(call: CallbackQuery):
 
-    #asyncio.ensure_future(www.start_minute(call.from_user.id, call.message.message_id))
-    await www.start_minute_fnc(call.from_user.id, call.message.message_id)
+    asyncio.ensure_future(www.start_minute(call.from_user.id, call.message.message_id))
+    #await www.start_minute_fnc(call.from_user.id, call.message.message_id)
 
 
 @dp.callback_query_handler(text="stop_timer")
