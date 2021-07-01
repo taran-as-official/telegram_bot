@@ -1,36 +1,20 @@
-import asyncio
-import os
-from loader import dp,bot,db
-from aiogram import types
-from aiogram.contrib.middlewares.logging import LoggingMiddleware
+from loader import dp,bot
 
 import logging
+import middlewares, filters, handlers #не уда
 
-import middlewares, filters, handlers
-
-from data import config
-#from data import debug_config as config
+#from data import config
+from data import debug_config as config
 
 from aiogram.utils.executor import start_webhook
-"""
-from bot.postgres import PostgreSQL #расскоментить при загрузке на прод
-from bot.games import whatWhereWhen as www #расскоментить при загрузке на прод
-from bot.settings import (BOT_TOKEN, HEROKU_APP_NAME, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT, ADMIN_ID,BOT_ID) #расскоментить при загрузке на прод
-"""
 
-#"""
-#from debug_config import (BOT_TOKEN, ADMIN_ID, BOT_ID) #расскоментить при зтестировании
 from aiogram.utils import executor #расскоментить при зтестировании
-#"""
-
-
-
-logging.basicConfig(level=logging.DEBUG)
+import  asyncio
 
 
 
 user = None
-logging.info(f'НАЧАЛО ПРОГРАММЫ')
+logging.debug(f'НАЧАЛО ПРОГРАММЫ')
 
 
 
@@ -49,9 +33,9 @@ logging.info(f'САМЫЙ КОНЕЦ ПРОГРАММЫ')
 
 
 #if '__init__' == '__main__':
-#executor.start_polling(dp, on_startup=on_startup)
+#executor.start_polling(dp, on_startup=on_startup,loop=asyncio.get_event_loop())
 
-
+executor.start_polling(dp, on_startup=on_startup,loop=asyncio.get_event_loop())
 
 
 def main():

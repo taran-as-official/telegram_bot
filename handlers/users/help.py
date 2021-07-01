@@ -11,3 +11,5 @@ async def bot_help(message: types.Message):
             "/help - Получить справку")
     
     await message.answer("\n".join(text))
+
+

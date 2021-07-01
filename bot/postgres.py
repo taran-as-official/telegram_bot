@@ -1,13 +1,13 @@
 import logging
 import psycopg2
 import re
-from data import config
-#from data import debug_config as config
+#from data import config
+from data import debug_config as config
 
 
 class PostgreSQL:
 
-    logging.basicConfig(level=logging.INFO)
+    #logging.basicConfig(level=logging.INFO)
 
     def __init__(self):
         logging.info("Создался экземпляр БД")
@@ -103,6 +103,23 @@ class PostgreSQL:
                             phone      = coalesce( {4}, t.phone) ;""".format(user_id,f_name,l_name,u_name,phone)
         self.run_query(sql_query)
 
+    def set_answer(self, user_id, answer):
+        #Добавляем нового подписчика или обновляем информацию
+        sql_query = """  INSERT INTO user_answers_tbl (id_user, answer)
+                         VALUES ({0}, '{1}')
+                         ON CONFLICT (id_user) DO UPDATE SET answer = EXCLUDED.answer;""".format(user_id,answer)
+        self.run_query(sql_query)
+
+
+    def get_answer(self, user_id):
+
+        sql_query = "select * from user_answers_tbl where id_user = {0}".format(user_id)
+
+        result = self.run_query(sql_query)
+
+        logging.info("Инфо об ответах: " + str(result))
+
+        return result
 
     def close(self):
         #Закрываем соединение с БД
