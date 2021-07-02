@@ -198,7 +198,7 @@ async def show_question_fnc(user_id, mess_id):
 
 
 
-        time_to_answer = 15
+        time_to_answer = 70
         show_quest = f"Вопрос №{quest_number + 1}:\n\n<b>{quests[quest_number]}</b>\n\n⌛ <b>{time_to_answer}</b>"
         # даем 11 секунд на ознакомление с вопросом
         for x in range(time_to_answer):
