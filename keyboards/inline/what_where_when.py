@@ -104,8 +104,7 @@ early_answer = InlineKeyboardMarkup(
 next_question = InlineKeyboardMarkup(
     inline_keyboard=[
         [
-            InlineKeyboardButton(text='Далее', callback_data = "next_question"),
-            InlineKeyboardButton(text='Выход', callback_data = "exit")
+            InlineKeyboardButton(text='Далее', callback_data = "next_question")
         ]
     ]
 
