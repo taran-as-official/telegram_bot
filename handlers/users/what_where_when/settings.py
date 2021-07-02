@@ -8,10 +8,13 @@ from aiogram.types import CallbackQuery
 
 from games import what_where_when as www
 from keyboards.inline import play_game, start_game, countTeamsKeyMark, hostInfo, shareMethodMrp, shareLinkMrp
+from keyboards.inline.what_where_when import connInGame
 
 from loader import dp, bot
 from states.what_where_when import WhatWhereWhen as www_state
 import logging
+
+import qrcode
 
 """
 #Пример state
@@ -231,19 +234,38 @@ async def get_name_teams_fnc(message:types.Message, state: FSMContext):
     #если хост игры будет играть, то он должен сразу выбрать команду
     #if is_host_player == 1:
 
-    #если хост играет сам с собой то пропускаем момент приглашения в игру
-    if cnt_name_teams == 1 and is_host_player == 1:
+    await message.answer("Игра успешно создана! 🦉", reply_markup=connInGame)
+    await www_state.inviteTeam.set()
 
-        await message.answer("Готовы?", reply_markup=start_game)
+# узнаем каким способом пользователь будет приглашать людей в игру
+@dp.callback_query_handler(state=www_state.inviteTeam)
+async def invite_teams_fnc(call: CallbackQuery, state: FSMContext):
+    #если хост играет сам с собой то пропускаем момент приглашения в игру
+    #if cnt_name_teams == 1 and is_host_player == 1:
+
+    #    await message.answer("Готовы?", reply_markup=start_game)
 
         # переводим в state ожидания других игроков
-        await www_state.inviteTeam.set()
 
-    else:
-        #переводим хоста в решим ожидания подключения других игроков
-        await www_state.getShareMethod.set()
-        await message.answer(team_name.title(), reply_markup=shareMethodMrp)
 
+    #else:
+    #переводим хоста в решим ожидания подключения других игроков
+    bot_username = (await bot.get_me()).username
+    id_referal = call.from_user.id
+
+    bot_link = f"https://t.me/{bot_username}?start={id_referal}"
+    # имя конечного файла
+    filename = f"media/pics/inviteQRCODE{id_referal}.png"
+    # генерируем qr-код
+    img = qrcode.make(bot_link)
+    # сохраняем img в файл
+    img.save(filename)
+    asyncio.ensure_future(www.wait_teams_fnc(call.from_user.id, call.message.message_id))
+
+    state = await state.get_data()
+    #если хост не играет или команд больше одной , то отправляем QRCODE
+    if state["is_host_player"] == 0 or len(state["teams"]) > 1:
+        await bot.send_photo(call.message.chat.id, photo=open(filename, 'rb'))
     #await message.answer(show_teams, reply_markup=shareMethodMrp)
 
     # переводим хоста в решим ожидания подключения других игроков
@@ -291,26 +313,6 @@ async def inline_handler(query: types.InlineQuery):
 
 
 
-
-#узнаем каким способом пользователь будет приглашать людей в игру
-@dp.callback_query_handler(state=www_state.getShareMethod)
-async def set_share_method_fnc(call: CallbackQuery):
-
-    logging.info("зашли в set_share_method_fnc (для выбора способа приглашения)")
-
-    share_method = call.data
-
-    if share_method == "scan_qrcode":
-        await call.answer("Функционал еще в разработке", cache_time=3)
-    elif share_method == "send_link":
-
-        logging.info("Выводим пользователю кнопку Поделиться + показываем инфо о том, кто подключился, а кто нет")
-        asyncio.ensure_future(www.wait_teams_fnc(call.from_user.id, call.message.message_id))
-
-        logging.info("Создали task и пошли дальше:")
-
-        #переводим в state ожидания других игроков
-        await www_state.inviteTeam.set()
 
 
 #в этом хендлере ждем подключения к игре игроков

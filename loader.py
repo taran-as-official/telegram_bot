@@ -3,8 +3,8 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from bot.postgres import PostgreSQL #расскоментить при зтестировании
 #from utils.misc import logging
-#from data import config
-from data import debug_config as config
+from data import config
+#from data import debug_config as config
 import logging
 
 logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s',

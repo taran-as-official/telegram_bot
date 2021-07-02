@@ -15,14 +15,53 @@ from keyboards.inline.what_where_when import give_minute, early_answer, next_que
 
 
 
-quests = ['Как зовут именника по православному?', 'Как зовут жену именника?']
+quests = ['Швейцарец Жан-Жак Бабель подсчитал, что с 3500 года до н.э. человечество провело всего лишь 292 года без... Чего?',
+          'Человек не чувствует запахов пока',
+          'Суто, Юго-Восточная Африка: "Неизведанная даль беспокоит сердце, а знакомая окрестность — только ..." Что?',
+          'У многих скоморохов в древности была погремушка из бычьего пузыря. А плоды какого растения находились внутри этого пузыря?',
+          'В среднем человек проводит 6 месяцев своей жизни ожидая',
+          'В одном американском городе местные библиотекари устроили необычную выставку. Среди разнообразных бумажек посетители могли увидеть ломтики сала, кухонные ножи, хирургические перчатки и лезвия для бритья. Чем в свое время служили экспонаты?',
+          'Если есть слишком много моркови можно ... Что?',
+          'На вершине Эвереста можно найти останки ... Кого/Чего?',
+          'В последнее время на Западе на некоторых туристических картах, для удобства пеших прогулок, изолинии пеших равноудаленности от отеля и расстояния отмечаются не в метрах или км., а в чем?',
+          'Собаки определяют, что их хозяин напуган, по запаху ... Чего?',
+          'Скатерти изначально использовались еще и как ... Что?',
+          'На стенах пирамиды Сахурн можно встретить изображения работающих людей, одетых в нечто, похожее на плавки с квадратным куском кожи на задней части. Какова профессия этих людей?'
+          ]
+answersPattern = ['войн'
+                  ,'спит'
+                  ,'ноги'
+                  ,'горох'
+                  ,'свет|зелен'
+                  ,'закладк|вклад'
+                  ,'желт'
+                  ,'морск|рыб|водн|водя'
+                  ,'час|минут|врем'
+                  ,'пот'
+                  ,'полотенц'
+                  ,'греб'
+                  ]
+answers = ['без войн'
+           ,'спит'
+           ,'ноги'
+           ,'горох'
+           ,'заленый свет светофора'
+           ,'закладки'
+           ,'пожелтеть'
+           ,'морских существ'
+           ,'в часах ходьбы'
+           ,'пота'
+           ,'полотенца'
+           ,'гребцы'
+           ]
+quest_comment = []
 game_is_runnig = True
 quest_number = 0
 stop_timer = False
 
-answers = ['Артем', 'Анна']
+
 user_answers = []
-quest_comment = ['Вот так вот', 'Да, именно так и зовут']
+
 
 score = 0
 
@@ -61,29 +100,27 @@ async def wait_teams_fnc(chat_id, mess_id):
 
         if i == 4:
             i = 1
-        #если функция запущена для хоста игры, то выводим ему результат с кнопкой Поделиться
-        if is_host:
-            await bot.edit_message_text(chat_id=chat_id, message_id=mess_id, text=show_teams, reply_markup=shareLinkMrp)
-        else:
-            await bot.edit_message_text(chat_id=chat_id, message_id=mess_id, text=show_teams)
-        # await self.bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,reply_markup=self.markup_early_answer)
 
         #как только закончились команды, которым не назначен хост, выходим из цикла
         if cnt_noconn_teams == 0:
             show_teams = re.sub(r"Ожидание подключение других участников:", f"Все участники успешно подключились:", show_teams)
 
             await bot.edit_message_text(chat_id=chat_id, message_id=mess_id, text=show_teams)
-
-            # словарь для ответов в глобальной переменной
-            global user_answers
-            for team in data["teams"]:
-                user_answers.append({"host_id": team["host_id"], "cur_answer": None})
-
             break
+
+        #если функция запущена для хоста игры, то выводим ему результат с кнопкой Поделиться
+        if is_host:
+            show_teams = show_teams + "\n\nДайте игрокам отсканировать QRCODE или пришлите им ссылку"
+            await bot.edit_message_text(chat_id=chat_id, message_id=mess_id, text=show_teams, reply_markup=shareLinkMrp)
+        else:
+            await bot.edit_message_text(chat_id=chat_id, message_id=mess_id, text=show_teams)
+        # await self.bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id,reply_markup=self.markup_early_answer)
+
 
         await sleep(1)
 
-    await bot.send_message(chat_id=chat_id, text="Теперь, как только все участники будут готовы, игра начнется!", reply_markup=start_game)
+    rules = "<b>Правила:</b>\n\n1. Вопросы не появятся, пока каждый игрок подтвердит готовность\n\n2. После нажатия кнопки \"Начать игру\"\\\"Далее\" у вас будет 70 секунд, чтобы написать свой ответ\n\n3. В зачет идет последний отправленный ответ"
+    await bot.send_message(chat_id=chat_id, text="Теперь, как только все участники будут готовы, игра начнется!\n\n" + rules, reply_markup=start_game)
 
 
 
@@ -136,7 +173,7 @@ async def show_question_fnc(user_id, mess_id):
         # как только закончились команды, которые не готовы - начинаем игру через 5 секунд
         if cnt_noconn_teams == 0:
 
-            time_to_start = 5
+            time_to_start = 3
 
             show_teams = re.sub(r"Ожидание готовности участников:",
                                 f"Все готовы игра начнется через <b>{time_to_start}</b>", show_teams)
@@ -161,42 +198,9 @@ async def show_question_fnc(user_id, mess_id):
 
 
 
-        time_to_read = 5
-        show_quest = f"Вопрос {quest_number + 1}:\n\n<b>{quests[quest_number]}</b>\n\nМинута начнется через <b>{time_to_read}</b>"
+        time_to_answer = 15
+        show_quest = f"Вопрос №{quest_number + 1}:\n\n<b>{quests[quest_number]}</b>\n\n⌛ <b>{time_to_answer}</b>"
         # даем 11 секунд на ознакомление с вопросом
-        for x in range(time_to_read):
-            show_quest = re.sub(r"<b>\d+<\/b>", f"<b>{time_to_read - x}</b>", show_quest)
-
-            for team in data["teams"]:
-                if team["host_id"] == user_id:
-                    await bot.edit_message_text(chat_id=team["host_id"], message_id=mess_id, text=show_quest)
-                    break
-
-            await sleep(1)
-
-        time_to_think = 5
-
-        # убираем надпись Минута начнется...
-        show_quest = re.sub(r"Минута начнется через <b>\d+<\/b>", f"<b>{time_to_think}</b>", show_quest)
-
-        # даем минуту
-        for x in range(time_to_think):
-            show_quest = re.sub(r"<b>\d+<\/b>", f"<b>{time_to_think - x}</b>", show_quest)
-
-            for team in data["teams"]:
-
-                if team["host_id"] == user_id:
-                    await bot.edit_message_text(chat_id=team["host_id"], message_id=mess_id, text=show_quest)
-                    break
-
-            await sleep(1)
-
-
-
-        time_to_answer = 5
-        show_quest = re.sub(r"<b>\d+<\/b>", f"Время на ответ <b>{time_to_answer}</b>", show_quest)
-
-        # даем 10 сек на ответ
         for x in range(time_to_answer):
             show_quest = re.sub(r"<b>\d+<\/b>", f"<b>{time_to_answer - x}</b>", show_quest)
 
@@ -206,7 +210,8 @@ async def show_question_fnc(user_id, mess_id):
                     break
 
             await sleep(1)
-        logging.info("хранилищe " + str(data["teams"]))
+
+
         #быстро сбрасываем активность, чтобы в момент ответа пользователю не защитали ответ
         for team in data["teams"]:
             team["readyPlay"] = 0  # сбрасываем готовность, для ожидания других участников в новом вопросе
@@ -222,41 +227,47 @@ async def show_question_fnc(user_id, mess_id):
         #проверим на правильность ответов и предложим пойти дальше
         for team in data["teams"]:
 
-            add_text = "Неверно!"
+            add_text = "❌"
 
-            if team["host_id"] == user_id:
-
-                cur_answer = db.get_answer(user_id)
-                #если ответ совпадает, то прибавим бал
-                logging.info("хранилищe " + str(cur_answer))
-                logging.info("Ответ в массиве " + str(answers[quest_number]).lower())
+            cur_answer = db.get_answer(team["host_id"])
+            #если ответ совпадает, то прибавим бал
+            logging.info("хранилищe " + str(cur_answer))
+            logging.info("Ответ в массиве " + str(answers[quest_number]).lower())
 
 
-
-
-
-                if cur_answer[1] == str(answers[quest_number]).lower():
+            #если пользователь хоть что то ответил, то зайдем проверять на корректность его ответ
+            if cur_answer:
+                #правильный ответ является шаблоном для регулярного выражения, чтобы максимально засчитывать верные ответы
+                if re.search(answersPattern[quest_number], cur_answer[1]):
                     team["score"] += 1
-                    add_text = "Верно!"
+                    add_text = "✅"
 
 
-            show_quest = re.sub(r"Время на ответ <b>\d+<\/b>", add_text, show_quest)
+            show_quest = re.sub(r"(.+<b>\d+<\/b>)$", add_text, show_quest)
             # удалим инфу о таймере и оставим только текст вопроса
-            await bot.edit_message_text(chat_id=team["host_id"], message_id=mess_id, text=show_quest)
+            if team["host_id"] == user_id:
+                await bot.edit_message_text(chat_id=team["host_id"], message_id=mess_id, text=show_quest)
+
+        #убираем верно или неверно,
+        add_text = "Верно✅" if add_text == "✅" else "Неверно❌"
 
 
         if quest_number + 1 == len(quests):
             await bot.send_message(chat_id=user_id,
-                                   text=add_text + '\n\nОтвет: ' + answers[quest_number] + '\nКомментарий: ' + quest_comment[quest_number]+ "\n\n" + str(quest_number + 1) + ' из ' + str(len(quests)) + ' пройден ✅')
+                                   text=add_text + '\n\nОтвет: ' + answers[quest_number] + "\n\n" + str(quest_number + 1) + ' из ' + str(len(quests)) + ' пройден ✅')
 
             result = "Итого:\n\n"
+
+            #отсортируем список, будем выводить лидирующие команды первыми
+            data["teams"].sort(key=lambda dictionary: dictionary['score'], reverse=True)
+
             for team in data["teams"]:
-                result = result + team["name"] + ": <b>" + str(team["score"]) + "</b>"
+                result = result + team["name"] + ": <b>" + str(team["score"]) + "</b>\n"
             await bot.send_message(chat_id=user_id, text=result + '\n\nСпасибо за игру, вопросы закончились',
                                    reply_markup=exit_game)
         else:
             await bot.send_message(chat_id=user_id,
-                                   text=add_text + '\n\nОтвет: ' + answers[quest_number] + '\nКомментарий: ' + quest_comment[quest_number]+ "\n\n" + str(quest_number + 1) + ' из ' + str(len(quests)) + ' пройден ✅',
+                                   text=add_text + '\n\nОтвет: ' + answers[quest_number] + "\n\n" + str(quest_number + 1) + ' из ' + str(len(quests)) + ' пройден ✅',
                                    reply_markup=next_question)
 
         #переходим к следующему вопросу

@@ -3,8 +3,8 @@ from loader import dp,bot
 import logging
 import middlewares, filters, handlers #не уда
 
-#from data import config
-from data import debug_config as config
+from data import config
+#from data import debug_config as config
 
 from aiogram.utils.executor import start_webhook
 
@@ -35,7 +35,7 @@ logging.info(f'САМЫЙ КОНЕЦ ПРОГРАММЫ')
 #if '__init__' == '__main__':
 #executor.start_polling(dp, on_startup=on_startup,loop=asyncio.get_event_loop())
 
-executor.start_polling(dp, on_startup=on_startup,loop=asyncio.get_event_loop())
+#executor.start_polling(dp, on_startup=on_startup,loop=asyncio.get_event_loop())
 
 
 def main():
