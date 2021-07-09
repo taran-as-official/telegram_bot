@@ -119,7 +119,8 @@ async def wait_teams_fnc(chat_id, mess_id):
 
         await sleep(1)
 
-    rules = "<b>Правила:</b>\n\n1. Вопросы не появятся, пока каждый игрок подтвердит готовность\n\n2. После нажатия кнопки \"Начать игру\"\\\"Далее\" у вас будет 70 секунд, чтобы написать свой ответ\n\n3. В зачет идет последний отправленный ответ"
+
+    rules = "<b>Правила:</b>\n\n1. Вопросы не появятся, пока каждый игрок подтвердит готовность\n\n2. После нажатия кнопки \"Начать игру\"\\\"Далее\" у вас будет 60 секунд, чтобы написать свой ответ\n\n3. В зачет идет последний отправленный ответ"
     await bot.send_message(chat_id=chat_id, text="Теперь, как только все участники будут готовы, игра начнется!\n\n" + rules, reply_markup=start_game)
 
 
@@ -198,7 +199,7 @@ async def show_question_fnc(user_id, mess_id):
 
 
 
-        time_to_answer = 70
+        time_to_answer = 60
         show_quest = f"Вопрос №{quest_number + 1}:\n\n<b>{quests[quest_number]}</b>\n\n⌛ <b>{time_to_answer}</b>"
         # даем 11 секунд на ознакомление с вопросом
         for x in range(time_to_answer):

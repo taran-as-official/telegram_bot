@@ -3,7 +3,7 @@ import psycopg2
 import re
 from data import config
 #from data import debug_config as config
-
+from aiogram import types
 
 class PostgreSQL:
 
@@ -81,13 +81,14 @@ class PostgreSQL:
         #если длина результат больше одного символа то считаем что подписчик существует
         return bool(len(self.run_query(sql_query)))
 
-    def get_user_info(self, user_id):
+    def get_user_info(self, msg: types.Message):
         #Вытягиваем всю необходимую инфу о пользователе
-        sql_query = "select * from telegram_users_tbl where id = {0}".format(user_id)
+        sql_query = "select * from telegram_users_tbl where id = {0}".format(msg.from_user.id)
 
         result = self.run_query(sql_query)
 
         logging.info("Инфо о пользователе: " + str(result))
+        logging.info("Инфо о пользователе из types : " + str(msg))
 
         return result
 

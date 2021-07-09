@@ -10,7 +10,7 @@ from games import what_where_when as www
 from keyboards.inline import play_game, start_game, countTeamsKeyMark, hostInfo, shareMethodMrp, shareLinkMrp
 from keyboards.inline.what_where_when import connInGame
 
-from loader import dp, bot
+from loader import dp, bot, db
 from states.what_where_when import WhatWhereWhen as www_state
 import logging
 
@@ -66,8 +66,10 @@ async def start_www_game_fnc(call: CallbackQuery, state: FSMContext):
             if team["host_id"] == cur_id:
                 team["readyPlay"] = 1
 
+                #очистим предыдущие ответы
+                db.set_answer(cur_id, 'Null')
                 logging.info(" Перед заходом в старт игры team[readyPlay]" + str(team["readyPlay"]))
-
+                break
 
     logging.info(" Перед заходом в старт игры call.message.message_id" + str(call.message.message_id))
 
@@ -136,7 +138,7 @@ async def set_teams_count_fnc(call: CallbackQuery, state: FSMContext):
         for i in range(team_count):
             data["teams"].append({"host_id": None, "name": None, "readyPlay": 0, "score": 0, "cur_answer": None})
 
-
+        logging.info("Команды в хранилище, после указания команд " + str( data["teams"]))
     #переводим пользователя в state заполнения доп инфо о хосте игры
     await www_state.getHostInfo.set()
     await call.message.edit_text(f"Количество команд: {team_count}")
@@ -159,7 +161,8 @@ async def set_host_info_fnc(call: CallbackQuery, state: FSMContext):
         text = "Укажите название команды, в которой будете играть вы"
         host_role = "игрок"
         await state.update_data(is_host_player=is_host_player)
-
+    state = await state.get_state()
+    logging.info("Команды в хранилище, после указания выбора роли хоста " + str(state))
 
     #переводим пользователя в state заполнения названия команд
     await www_state.getNameTeam.set()
@@ -195,10 +198,6 @@ async def get_name_teams_fnc(message:types.Message, state: FSMContext):
                 is_host_need_choose_team = True
 
         for team in data["teams"]:
-
-
-            if team["host_id"] == message.from_user.id:
-                is_host_choose_team = True
 
 
             #если есть незаполненные названия команд, то заполним их поступившим значением
@@ -260,12 +259,15 @@ async def invite_teams_fnc(call: CallbackQuery, state: FSMContext):
     img = qrcode.make(bot_link)
     # сохраняем img в файл
     img.save(filename)
-    asyncio.ensure_future(www.wait_teams_fnc(call.from_user.id, call.message.message_id))
 
     state = await state.get_data()
-    #если хост не играет или команд больше одной , то отправляем QRCODE
+    # если хост не играет или команд больше одной , то отправляем QRCODE
     if state["is_host_player"] == 0 or len(state["teams"]) > 1:
         await bot.send_photo(call.message.chat.id, photo=open(filename, 'rb'))
+
+    asyncio.ensure_future(www.wait_teams_fnc(call.from_user.id, call.message.message_id))
+
+
     #await message.answer(show_teams, reply_markup=shareMethodMrp)
 
     # переводим хоста в решим ожидания подключения других игроков
